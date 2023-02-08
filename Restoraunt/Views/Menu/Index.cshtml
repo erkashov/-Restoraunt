@@ -1,0 +1,69 @@
+﻿@model MenuModel
+@{
+    ViewData["Title"] = "Oasis";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Меню - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="info-container">
+        <h2 class="page-title">Меню</h2>
+        <div class="black-splitter"></div>
+
+        <div class="menu">
+            <ul class="menu-section-container">
+                <li><a asp-controller="Menu" asp-action="Index" asp-route-section="main" asp-route-type="salads" class="menu-section">ОСНОВНОЕ</a></li>
+                <li><a asp-controller="Menu" asp-action="Index" asp-route-section="for-company" class="menu-section">ДЛЯ КОМПАНИЙ</a></li>
+                <li><a asp-controller="Menu" asp-action="Index" asp-route-section="buisness" class="menu-section">БИЗНЕС-ЛАНЧИ</a></li>
+                <li><a asp-controller="Menu" asp-action="Index" asp-route-section="bar" asp-route-type="coctails" class="menu-section">БАР</a></li>
+            </ul>
+            <div class="menu-field">
+                <ul class="menu-type-container">
+                    @foreach (var item in Model.typesToSections)
+                    {
+                        <li><a asp-controller="Menu" asp-action="Index" asp-route-section="@item.Value" asp-route-type="@item.Key" class="menu-type">
+                                @{
+                                    string pos = "";
+
+                                    foreach(var posType in Model.positionTypes) {                                
+                                        if (posType.Name == item.Key)
+                                            pos = posType.NameRU;
+                                    }                                    
+                                }                            
+                            @pos
+                            </a></li>
+                    }
+                </ul>
+                <div class="card-container">
+                    @foreach (var item in Model.menuPositions)
+                    {
+
+                        <div class="card">
+                            @if (item.PositionType != null)
+                            {
+                                <img src="~/src/positions/@item.PositionType.Name/@item.Photo" class="img-pos" alt="test">
+                            }
+                            else
+                            {
+                                <img src="~/src/positions/@item.Section.Name/@item.Photo" class="img-pos" alt="test">
+                            }
+                            <h1>@item.Name</h1>
+                            <span class="position-description">@item.Decription</span>
+                            <div class="position-price">@item.Price руб.</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        <script type="text/javascript">
+            setLinksOutline(4, 'menu-section', 'active-section');
+            setLinksOutline(5, 'menu-type', 'active-type');
+        </script>
+    }
+    </body>
